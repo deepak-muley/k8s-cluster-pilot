@@ -1,0 +1,68 @@
+apiVersion: clusterpilot.io/v1alpha1
+kind: CompatibilityRuleSet
+rules:
+  - id: apiserver-admission-webhook-readiness
+    ruleType: admission-webhook-prerequisite
+    severity: medium
+    component:
+      type: admission-webhook
+      name: admission-webhook
+    description: >
+      Before kube-apiserver is upgraded, registered admission webhooks must be
+      able to handle the data the new kube-apiserver will send them, including
+      new REST resource versions and new fields. matchPolicy Equivalent reduces
+      exact-version mismatches. This rule does not prove a webhook is
+      incompatible; it requires verification.
+    remediation: >
+      Review each webhook before every minor upgrade. Confirm it accepts the
+      target API versions or uses matchPolicy Equivalent, and that it tolerates
+      new fields.
+    source:
+      url: https://kubernetes.io/releases/version-skew-policy/
+      title: Kubernetes version skew policy — supported component upgrade order
+      retrievedAt: "2026-11-09"
+    verification: official-documentation
+    confidence: high
+
+  - id: pdb-zero-disruptions-blocks-drain
+    ruleType: pdb-zero-disruptions
+    severity: medium
+    component:
+      type: pod-disruption-budget
+      name: pod-disruption-budget
+    description: >
+      A PodDisruptionBudget with disruptionsAllowed 0 rejects voluntary
+      evictions. Node drains used by minor kubelet upgrades can stall until
+      the budget allows a disruption. This is operational risk, not a version
+      incompatibility.
+    remediation: >
+      Inspect the listed budgets before draining a node. Confirm the workload
+      can tolerate the eviction or adjust the budget for the maintenance window.
+    source:
+      url: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+      title: Disruptions
+      retrievedAt: "2026-11-09"
+    verification: official-documentation
+    confidence: high
+
+  - id: prefer-latest-patch
+    ruleType: patch-advisory
+    severity: info
+    component:
+      type: kubernetes
+      name: kubernetes
+    description: >
+      When preparing an upgrade, the Kubernetes project recommends the latest
+      patch of the current minor and the latest patch of the target minor.
+      This knowledge base does not record which patch is latest, so no patch
+      number is selected.
+    remediation: >
+      Check the Kubernetes patch release page for the current latest patch
+      before each minor upgrade. Do not treat a patchless target such as 1.33
+      as a claim that 1.33.0 is the right patch.
+    source:
+      url: https://kubernetes.io/releases/version-skew-policy/
+      title: Kubernetes version skew policy
+      retrievedAt: "2026-11-09"
+    verification: official-documentation
+    confidence: high

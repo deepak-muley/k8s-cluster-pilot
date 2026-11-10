@@ -1,0 +1,228 @@
+apiVersion: clusterpilot.io/v1alpha1
+kind: KnowledgeBase
+name: clusterpilot-builtin
+retrievedAt: "2026-11-09"
+description: >
+  Official Kubernetes version-skew, upgrade-order, and removed-API rules.
+  This snapshot does not include CNI, CSI, OS, kernel, container-runtime,
+  or Helm chart compatibility matrices. Those combinations stay unknown
+  unless a chart publishes a kubeVersion constraint, which is recorded as a
+  publisher claim and is not treated as verified compatibility.
+sources:
+  - url: https://kubernetes.io/releases/version-skew-policy/
+    title: Kubernetes version skew policy
+    retrievedAt: "2026-11-09"
+  - url: https://kubernetes.io/docs/reference/using-api/deprecation-guide/
+    title: Kubernetes Deprecated API Migration Guide
+    retrievedAt: "2026-11-09"
+  - url: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
+    title: Disruptions
+    retrievedAt: "2026-11-09"
+---
+apiVersion: clusterpilot.io/v1alpha1
+kind: CompatibilityRuleSet
+rules:
+  - id: kube-apiserver-no-minor-skip
+    ruleType: minor-upgrade-step
+    severity: critical
+    component:
+      type: kube-apiserver
+      name: kube-apiserver
+    description: >
+      kube-apiserver must not skip minor versions when upgrading, including
+      in single-instance clusters. Skipping minor versions is unsupported.
+    remediation: >
+      Upgrade one minor version at a time and validate the cluster after each minor.
+    parameters:
+      maxMinorJump: 1
+    source:
+      url: https://kubernetes.io/releases/version-skew-policy/
+      title: Kubernetes version skew policy
+      retrievedAt: "2026-11-09"
+    verification: official-documentation
+    confidence: high
+
+  - id: kubelet-apiserver-skew
+    ruleType: version-skew
+    severity: critical
+    component:
+      type: kubelet
+      name: kubelet
+    description: >
+      kubelet must not be newer than kube-apiserver. kubelet may be up to
+      three minor versions older than kube-apiserver. kubelet versions older
+      than 1.25 may only be up to two minor versions older. Evaluated at
+      minor granularity, matching the policy examples. Patch differences
+      inside one minor are not treated as skew violations.
+    remediation: >
+      Upgrade kube-apiserver before kubelets when moving to a newer minor.
+      Raise kubelets before the next control-plane minor if leaving them
+      would exceed the supported lag.
+    parameters:
+      subject: kubelet
+      relativeTo: kube-apiserver
+      notNewerMinor: true
+      maxOlderMinor: 3
+      whenSubjectMinorBelow:
+        minor: 25
+        maxOlderMinor: 2
+    source:
+      url: https://kubernetes.io/releases/version-skew-policy/
+      title: Kubernetes version skew policy
+      retrievedAt: "2026-11-09"
+    verification: official-documentation
+    confidence: high
+
+  - id: kube-proxy-apiserver-skew
+    ruleType: version-skew
+    severity: critical
+    component:
+      type: kube-proxy
+      name: kube-proxy
+    description: >
+      kube-proxy must not be newer than kube-apiserver and may be up to three
+      minor versions older. kube-proxy versions older than 1.25 may only be
+      up to two minor versions older. Evaluated at minor granularity.
+    remediation: >
+      Upgrade kube-apiserver before kube-proxy when moving to a newer minor.
+      Raise kube-proxy first if the next control-plane minor would exceed the lag.
+    parameters:
+      subject: kube-proxy
+      relativeTo: kube-apiserver
+      notNewerMinor: true
+      maxOlderMinor: 3
+      whenSubjectMinorBelow:
+        minor: 25
+        maxOlderMinor: 2
+    source:
+      url: https://kubernetes.io/releases/version-skew-policy/
+      title: Kubernetes version skew policy
+      retrievedAt: "2026-11-09"
+    verification: official-documentation
+    confidence: high
+
+  - id: kube-proxy-kubelet-skew
+    ruleType: version-skew
+    severity: critical
+    component:
+      type: kube-proxy
+      name: kube-proxy
+    description: >
+      kube-proxy may be up to three minor versions older or newer than the
+      kubelet it runs alongside. kube-proxy versions older than 1.25 may only
+      be up to two minor versions older or newer than that kubelet.
+    remediation: >
+      Keep kube-proxy and kubelet within the supported relative minor skew
+      when either component is upgraded.
+    parameters:
+      subject: kube-proxy
+      relativeTo: kubelet
+      maxMinorDifference: 3
+      whenSubjectMinorBelow:
+        minor: 25
+        maxMinorDifference: 2
+    source:
+      url: https://kubernetes.io/releases/version-skew-policy/
+      title: Kubernetes version skew policy
+      retrievedAt: "2026-11-09"
+    verification: official-documentation
+    confidence: high
+
+  - id: kube-controller-manager-apiserver-skew
+    ruleType: version-skew
+    severity: critical
+    component:
+      type: kube-controller-manager
+      name: kube-controller-manager
+    description: >
+      kube-controller-manager must not be newer than the kube-apiserver
+      instances it communicates with. It is expected to match the
+      kube-apiserver minor and may be up to one minor version older to allow
+      live upgrades.
+    remediation: >
+      Upgrade kube-apiserver first, then upgrade kube-controller-manager to
+      the same minor.
+    parameters:
+      subject: kube-controller-manager
+      relativeTo: kube-apiserver
+      notNewerMinor: true
+      maxOlderMinor: 1
+    source:
+      url: https://kubernetes.io/releases/version-skew-policy/
+      title: Kubernetes version skew policy
+      retrievedAt: "2026-11-09"
+    verification: official-documentation
+    confidence: high
+
+  - id: kube-scheduler-apiserver-skew
+    ruleType: version-skew
+    severity: critical
+    component:
+      type: kube-scheduler
+      name: kube-scheduler
+    description: >
+      kube-scheduler must not be newer than the kube-apiserver instances it
+      communicates with. It is expected to match the kube-apiserver minor and
+      may be up to one minor version older to allow live upgrades.
+    remediation: >
+      Upgrade kube-apiserver first, then upgrade kube-scheduler to the same minor.
+    parameters:
+      subject: kube-scheduler
+      relativeTo: kube-apiserver
+      notNewerMinor: true
+      maxOlderMinor: 1
+    source:
+      url: https://kubernetes.io/releases/version-skew-policy/
+      title: Kubernetes version skew policy
+      retrievedAt: "2026-11-09"
+    verification: official-documentation
+    confidence: high
+
+  - id: cloud-controller-manager-apiserver-skew
+    ruleType: version-skew
+    severity: critical
+    component:
+      type: cloud-controller-manager
+      name: cloud-controller-manager
+    description: >
+      cloud-controller-manager must not be newer than the kube-apiserver
+      instances it communicates with. It is expected to match the
+      kube-apiserver minor and may be up to one minor version older to allow
+      live upgrades.
+    remediation: >
+      Upgrade kube-apiserver first, then upgrade cloud-controller-manager to
+      the same minor when the component is installed.
+    parameters:
+      subject: cloud-controller-manager
+      relativeTo: kube-apiserver
+      notNewerMinor: true
+      maxOlderMinor: 1
+    source:
+      url: https://kubernetes.io/releases/version-skew-policy/
+      title: Kubernetes version skew policy
+      retrievedAt: "2026-11-09"
+    verification: official-documentation
+    confidence: high
+
+  - id: kube-apiserver-ha-skew
+    ruleType: version-skew
+    severity: critical
+    component:
+      type: kube-apiserver
+      name: kube-apiserver
+    description: >
+      In a highly available cluster, the newest and oldest kube-apiserver
+      instances must be within one minor version.
+    remediation: >
+      Finish upgrading every kube-apiserver instance to the new minor before
+      starting the next minor.
+    parameters:
+      subject: kube-apiserver
+      relativeTo: kube-apiserver
+      maxMinorDifference: 1
+    source:
+      url: https://kubernetes.io/releases/version-skew-policy/
+      title: Kubernetes version skew policy
+      retrievedAt: "2026-11-09"
+    verification: official-documentation
+    confidence: high

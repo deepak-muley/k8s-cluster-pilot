@@ -1,0 +1,444 @@
+apiVersion: clusterpilot.io/v1alpha1
+kind: CompatibilityRuleSet
+rules:
+  - id: removed-extensions-v1beta1-networkpolicy
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: networkpolicy}
+    description: extensions/v1beta1 NetworkPolicy is no longer served as of Kubernetes 1.16.
+    remediation: Migrate manifests and API clients to networking.k8s.io/v1, available since 1.8.
+    parameters: {group: extensions, version: v1beta1, kinds: [NetworkPolicy], removedIn: "1.16", replacement: networking.k8s.io/v1}
+    source: &guide {url: https://kubernetes.io/docs/reference/using-api/deprecation-guide/, title: Kubernetes Deprecated API Migration Guide, retrievedAt: "2026-11-09"}
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-extensions-v1beta1-daemonset
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: daemonset}
+    description: extensions/v1beta1 DaemonSet is no longer served as of Kubernetes 1.16.
+    remediation: Migrate to apps/v1, available since 1.9. spec.selector is required and immutable.
+    parameters: {group: extensions, version: v1beta1, kinds: [DaemonSet], removedIn: "1.16", replacement: apps/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-apps-v1beta2-daemonset
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: daemonset}
+    description: apps/v1beta2 DaemonSet is no longer served as of Kubernetes 1.16.
+    remediation: Migrate to apps/v1, available since 1.9.
+    parameters: {group: apps, version: v1beta2, kinds: [DaemonSet], removedIn: "1.16", replacement: apps/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-extensions-v1beta1-deployment
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: deployment}
+    description: extensions/v1beta1 Deployment is no longer served as of Kubernetes 1.16.
+    remediation: Migrate to apps/v1, available since 1.9. spec.selector is required.
+    parameters: {group: extensions, version: v1beta1, kinds: [Deployment], removedIn: "1.16", replacement: apps/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-apps-v1beta1-deployment
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: deployment}
+    description: apps/v1beta1 Deployment is no longer served as of Kubernetes 1.16.
+    remediation: Migrate to apps/v1, available since 1.9.
+    parameters: {group: apps, version: v1beta1, kinds: [Deployment], removedIn: "1.16", replacement: apps/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-apps-v1beta2-deployment
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: deployment}
+    description: apps/v1beta2 Deployment is no longer served as of Kubernetes 1.16.
+    remediation: Migrate to apps/v1, available since 1.9.
+    parameters: {group: apps, version: v1beta2, kinds: [Deployment], removedIn: "1.16", replacement: apps/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-apps-v1beta1-statefulset
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: statefulset}
+    description: apps/v1beta1 StatefulSet is no longer served as of Kubernetes 1.16.
+    remediation: Migrate to apps/v1, available since 1.9.
+    parameters: {group: apps, version: v1beta1, kinds: [StatefulSet], removedIn: "1.16", replacement: apps/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-apps-v1beta2-statefulset
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: statefulset}
+    description: apps/v1beta2 StatefulSet is no longer served as of Kubernetes 1.16.
+    remediation: Migrate to apps/v1, available since 1.9.
+    parameters: {group: apps, version: v1beta2, kinds: [StatefulSet], removedIn: "1.16", replacement: apps/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-extensions-v1beta1-replicaset
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: replicaset}
+    description: extensions/v1beta1 ReplicaSet is no longer served as of Kubernetes 1.16.
+    remediation: Migrate to apps/v1, available since 1.9.
+    parameters: {group: extensions, version: v1beta1, kinds: [ReplicaSet], removedIn: "1.16", replacement: apps/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-apps-v1beta1-replicaset
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: replicaset}
+    description: apps/v1beta1 ReplicaSet is no longer served as of Kubernetes 1.16.
+    remediation: Migrate to apps/v1, available since 1.9.
+    parameters: {group: apps, version: v1beta1, kinds: [ReplicaSet], removedIn: "1.16", replacement: apps/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-apps-v1beta2-replicaset
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: replicaset}
+    description: apps/v1beta2 ReplicaSet is no longer served as of Kubernetes 1.16.
+    remediation: Migrate to apps/v1, available since 1.9.
+    parameters: {group: apps, version: v1beta2, kinds: [ReplicaSet], removedIn: "1.16", replacement: apps/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-extensions-v1beta1-podsecuritypolicy
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: podsecuritypolicy}
+    description: extensions/v1beta1 PodSecurityPolicy is no longer served as of Kubernetes 1.16.
+    remediation: The 1.16 replacement was policy/v1beta1, which was itself removed in 1.25. Migrate to Pod Security Admission or another admission control.
+    parameters: {group: extensions, version: v1beta1, kinds: [PodSecurityPolicy], removedIn: "1.16", replacement: policy/v1beta1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-admissionregistration-v1beta1-webhooks
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: webhookconfiguration}
+    description: admissionregistration.k8s.io/v1beta1 webhook configurations are no longer served as of Kubernetes 1.22.
+    remediation: Migrate to admissionregistration.k8s.io/v1, available since 1.16. In v1, failurePolicy defaults to Fail, matchPolicy defaults to Equivalent, and sideEffects and admissionReviewVersions are required.
+    parameters:
+      group: admissionregistration.k8s.io
+      version: v1beta1
+      kinds: [MutatingWebhookConfiguration, ValidatingWebhookConfiguration]
+      removedIn: "1.22"
+      replacement: admissionregistration.k8s.io/v1
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-apiextensions-v1beta1-crd
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: customresourcedefinition}
+    description: apiextensions.k8s.io/v1beta1 CustomResourceDefinition is no longer served as of Kubernetes 1.22.
+    remediation: Migrate to apiextensions.k8s.io/v1, available since 1.16. v1 requires a structural schema and spec.scope.
+    parameters: {group: apiextensions.k8s.io, version: v1beta1, kinds: [CustomResourceDefinition], removedIn: "1.22", replacement: apiextensions.k8s.io/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-apiregistration-v1beta1-apiservice
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: apiservice}
+    description: apiregistration.k8s.io/v1beta1 APIService is no longer served as of Kubernetes 1.22.
+    remediation: Migrate to apiregistration.k8s.io/v1, available since 1.10.
+    parameters: {group: apiregistration.k8s.io, version: v1beta1, kinds: [APIService], removedIn: "1.22", replacement: apiregistration.k8s.io/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-authentication-v1beta1-tokenreview
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: tokenreview}
+    description: authentication.k8s.io/v1beta1 TokenReview is no longer served as of Kubernetes 1.22.
+    remediation: Migrate to authentication.k8s.io/v1, available since 1.6.
+    parameters: {group: authentication.k8s.io, version: v1beta1, kinds: [TokenReview], removedIn: "1.22", replacement: authentication.k8s.io/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-authorization-v1beta1-reviews
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: subjectaccessreview}
+    description: authorization.k8s.io/v1beta1 review APIs are no longer served as of Kubernetes 1.22.
+    remediation: Migrate to authorization.k8s.io/v1, available since 1.6. spec.group was renamed to spec.groups.
+    parameters:
+      group: authorization.k8s.io
+      version: v1beta1
+      kinds: [LocalSubjectAccessReview, SelfSubjectAccessReview, SubjectAccessReview, SelfSubjectRulesReview]
+      removedIn: "1.22"
+      replacement: authorization.k8s.io/v1
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-certificates-v1beta1-csr
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: certificatesigningrequest}
+    description: certificates.k8s.io/v1beta1 CertificateSigningRequest is no longer served as of Kubernetes 1.22.
+    remediation: Migrate to certificates.k8s.io/v1, available since 1.19. spec.signerName and spec.usages are required.
+    parameters: {group: certificates.k8s.io, version: v1beta1, kinds: [CertificateSigningRequest], removedIn: "1.22", replacement: certificates.k8s.io/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-coordination-v1beta1-lease
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: lease}
+    description: coordination.k8s.io/v1beta1 Lease is no longer served as of Kubernetes 1.22.
+    remediation: Migrate to coordination.k8s.io/v1, available since 1.14.
+    parameters: {group: coordination.k8s.io, version: v1beta1, kinds: [Lease], removedIn: "1.22", replacement: coordination.k8s.io/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-extensions-v1beta1-ingress
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: ingress}
+    description: extensions/v1beta1 Ingress is no longer served as of Kubernetes 1.22.
+    remediation: Migrate to networking.k8s.io/v1, available since 1.19. pathType is required and backend fields were renamed.
+    parameters: {group: extensions, version: v1beta1, kinds: [Ingress], removedIn: "1.22", replacement: networking.k8s.io/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-networking-v1beta1-ingress
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: ingress}
+    description: networking.k8s.io/v1beta1 Ingress is no longer served as of Kubernetes 1.22.
+    remediation: Migrate to networking.k8s.io/v1, available since 1.19. pathType is required and backend fields were renamed.
+    parameters: {group: networking.k8s.io, version: v1beta1, kinds: [Ingress], removedIn: "1.22", replacement: networking.k8s.io/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-networking-v1beta1-ingressclass
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: ingressclass}
+    description: networking.k8s.io/v1beta1 IngressClass is no longer served as of Kubernetes 1.22.
+    remediation: Migrate to networking.k8s.io/v1, available since 1.19.
+    parameters: {group: networking.k8s.io, version: v1beta1, kinds: [IngressClass], removedIn: "1.22", replacement: networking.k8s.io/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-rbac-v1beta1
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: rbac}
+    description: rbac.authorization.k8s.io/v1beta1 role APIs are no longer served as of Kubernetes 1.22.
+    remediation: Migrate to rbac.authorization.k8s.io/v1, available since 1.8.
+    parameters:
+      group: rbac.authorization.k8s.io
+      version: v1beta1
+      kinds: [ClusterRole, ClusterRoleBinding, Role, RoleBinding]
+      removedIn: "1.22"
+      replacement: rbac.authorization.k8s.io/v1
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-scheduling-v1beta1-priorityclass
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: priorityclass}
+    description: scheduling.k8s.io/v1beta1 PriorityClass is no longer served as of Kubernetes 1.22.
+    remediation: Migrate to scheduling.k8s.io/v1, available since 1.14.
+    parameters: {group: scheduling.k8s.io, version: v1beta1, kinds: [PriorityClass], removedIn: "1.22", replacement: scheduling.k8s.io/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-storage-v1beta1-core
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: storage}
+    description: storage.k8s.io/v1beta1 CSIDriver, CSINode, StorageClass, and VolumeAttachment are no longer served as of Kubernetes 1.22.
+    remediation: Migrate to storage.k8s.io/v1.
+    parameters:
+      group: storage.k8s.io
+      version: v1beta1
+      kinds: [CSIDriver, CSINode, StorageClass, VolumeAttachment]
+      removedIn: "1.22"
+      replacement: storage.k8s.io/v1
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-batch-v1beta1-cronjob
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: cronjob}
+    description: batch/v1beta1 CronJob is no longer served as of Kubernetes 1.25.
+    remediation: Migrate to batch/v1, available since 1.21.
+    parameters: {group: batch, version: v1beta1, kinds: [CronJob], removedIn: "1.25", replacement: batch/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-discovery-v1beta1-endpointslice
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: endpointslice}
+    description: discovery.k8s.io/v1beta1 EndpointSlice is no longer served as of Kubernetes 1.25.
+    remediation: Migrate to discovery.k8s.io/v1, available since 1.21. topology was replaced by per-endpoint nodeName and zone.
+    parameters: {group: discovery.k8s.io, version: v1beta1, kinds: [EndpointSlice], removedIn: "1.25", replacement: discovery.k8s.io/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-events-v1beta1-event
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: event}
+    description: events.k8s.io/v1beta1 Event is no longer served as of Kubernetes 1.25.
+    remediation: Migrate to events.k8s.io/v1, available since 1.19.
+    parameters: {group: events.k8s.io, version: v1beta1, kinds: [Event], removedIn: "1.25", replacement: events.k8s.io/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-autoscaling-v2beta1-hpa
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: horizontalpodautoscaler}
+    description: autoscaling/v2beta1 HorizontalPodAutoscaler is no longer served as of Kubernetes 1.25.
+    remediation: Migrate to autoscaling/v2, available since 1.23. Metric target fields moved under target.
+    parameters: {group: autoscaling, version: v2beta1, kinds: [HorizontalPodAutoscaler], removedIn: "1.25", replacement: autoscaling/v2}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-policy-v1beta1-pdb
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: poddisruptionbudget}
+    description: policy/v1beta1 PodDisruptionBudget is no longer served as of Kubernetes 1.25.
+    remediation: Migrate to policy/v1, available since 1.21. An empty selector in policy/v1 selects all pods.
+    parameters: {group: policy, version: v1beta1, kinds: [PodDisruptionBudget], removedIn: "1.25", replacement: policy/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-policy-v1beta1-podsecuritypolicy
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: podsecuritypolicy}
+    description: policy/v1beta1 PodSecurityPolicy is no longer served as of Kubernetes 1.25, and its admission controller was removed.
+    remediation: Migrate to Pod Security Admission or a third-party admission webhook. There is no in-tree PodSecurityPolicy API replacement.
+    parameters: {group: policy, version: v1beta1, kinds: [PodSecurityPolicy], removedIn: "1.25", replacement: pod-security-admission}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-node-v1beta1-runtimeclass
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: runtimeclass}
+    description: node.k8s.io/v1beta1 RuntimeClass is no longer served as of Kubernetes 1.25.
+    remediation: Migrate to node.k8s.io/v1, available since 1.20.
+    parameters: {group: node.k8s.io, version: v1beta1, kinds: [RuntimeClass], removedIn: "1.25", replacement: node.k8s.io/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-flowcontrol-v1beta1
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: flowschema}
+    description: flowcontrol.apiserver.k8s.io/v1beta1 FlowSchema and PriorityLevelConfiguration are no longer served as of Kubernetes 1.26.
+    remediation: The guide's replacement at removal was v1beta2. v1beta2 was removed in 1.29 and v1beta3 in 1.32. Migrate clients to flowcontrol.apiserver.k8s.io/v1.
+    parameters:
+      group: flowcontrol.apiserver.k8s.io
+      version: v1beta1
+      kinds: [FlowSchema, PriorityLevelConfiguration]
+      removedIn: "1.26"
+      replacement: flowcontrol.apiserver.k8s.io/v1
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-autoscaling-v2beta2-hpa
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: horizontalpodautoscaler}
+    description: autoscaling/v2beta2 HorizontalPodAutoscaler is no longer served as of Kubernetes 1.26.
+    remediation: Migrate to autoscaling/v2, available since 1.23. Metric target fields moved under target.
+    parameters: {group: autoscaling, version: v2beta2, kinds: [HorizontalPodAutoscaler], removedIn: "1.26", replacement: autoscaling/v2}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-storage-v1beta1-csistoragecapacity
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: csistoragecapacity}
+    description: storage.k8s.io/v1beta1 CSIStorageCapacity is no longer served as of Kubernetes 1.27.
+    remediation: Migrate to storage.k8s.io/v1, available since 1.24.
+    parameters: {group: storage.k8s.io, version: v1beta1, kinds: [CSIStorageCapacity], removedIn: "1.27", replacement: storage.k8s.io/v1}
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-flowcontrol-v1beta2
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: flowschema}
+    description: flowcontrol.apiserver.k8s.io/v1beta2 FlowSchema and PriorityLevelConfiguration are no longer served as of Kubernetes 1.29.
+    remediation: Migrate to flowcontrol.apiserver.k8s.io/v1, available since 1.29. assuredConcurrencyShares was renamed to nominalConcurrencyShares.
+    parameters:
+      group: flowcontrol.apiserver.k8s.io
+      version: v1beta2
+      kinds: [FlowSchema, PriorityLevelConfiguration]
+      removedIn: "1.29"
+      replacement: flowcontrol.apiserver.k8s.io/v1
+    source: *guide
+    verification: official-documentation
+    confidence: high
+
+  - id: removed-flowcontrol-v1beta3
+    ruleType: removed-api
+    severity: critical
+    component: {type: kubernetes-api, name: flowschema}
+    description: flowcontrol.apiserver.k8s.io/v1beta3 FlowSchema and PriorityLevelConfiguration are no longer served as of Kubernetes 1.32.
+    remediation: Migrate to flowcontrol.apiserver.k8s.io/v1, available since 1.29. An explicit nominalConcurrencyShares of 0 is preserved.
+    parameters:
+      group: flowcontrol.apiserver.k8s.io
+      version: v1beta3
+      kinds: [FlowSchema, PriorityLevelConfiguration]
+      removedIn: "1.32"
+      replacement: flowcontrol.apiserver.k8s.io/v1
+    source: *guide
+    verification: official-documentation
+    confidence: high
