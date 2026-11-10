@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/version"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/version"
 )
 
 // Execute runs clusterpilot with args. Writers receive normal output and errors.
@@ -20,8 +20,17 @@ func Execute(args []string, stdout, stderr io.Writer) error {
 
 func newRoot(stdout, stderr io.Writer) *cobra.Command {
 	root := &cobra.Command{
-		Use:           "clusterpilot",
-		Short:         "Read-only Kubernetes upgrade intelligence",
+		Use:   "clusterpilot",
+		Short: "Read-only Kubernetes upgrade intelligence",
+		Long: `ClusterPilot discovers a Kubernetes cluster, writes a versioned inventory,
+and evaluates that inventory offline against a target Kubernetes version.
+
+discover is the only command that connects to a cluster. analyze, plan, and
+report read files and do not change the cluster.`,
+		Example: `  clusterpilot discover -o inventory.json
+  clusterpilot analyze --inventory inventory.json --target-kubernetes 1.33
+  clusterpilot plan --inventory inventory.json --target-kubernetes 1.33 -o plan.json
+  clusterpilot report --input plan.json --format markdown`,
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		Version:       version.Version,

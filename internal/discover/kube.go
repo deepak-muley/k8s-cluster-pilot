@@ -6,7 +6,7 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/version"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/version"
 )
 
 // RESTConfig loads a kubeconfig context and returns the context and cluster names.

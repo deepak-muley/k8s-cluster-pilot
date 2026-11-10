@@ -1,0 +1,20 @@
+name: Feature
+description: Propose a change to discovery, analysis, planning, or the knowledge base.
+title: "feature: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What ClusterPilot cannot tell you today.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: Missing evidence must stay unknown. Name the rule, document, or inventory field that would support the new result.
+    validations:
+      required: true

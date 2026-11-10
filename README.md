@@ -78,10 +78,20 @@ go test ./...
 go build -o bin/clusterpilot ./cmd/clusterpilot
 ```
 
-Requires Go 1.24.
+Requires Go 1.24. To install the published module:
+
+```bash
+go install github.com/deepak-muley/k8s-cluster-pilot/cmd/clusterpilot@latest
+```
 
 ## Out of scope
 
-The POC does not simulate an upgrade, score a fleet, or apply changes. It does not implement the other product ideas in the brief: flight recorder, event delivery, supply-chain intelligence, inference fleet management, or telemetry optimization. It also does not shell out to Pluto, kubent, KubePug, or Silver Surfer. Those tools remain complementary. This knowledge base cites the Kubernetes documentation directly instead of copying their datasets.
+ClusterPilot does not simulate an upgrade, score a fleet, or apply changes. It also does not shell out to Pluto, kubent, KubePug, or Silver Surfer. Those tools remain complementary. This knowledge base cites the Kubernetes documentation directly instead of copying their datasets.
 
-License: Apache-2.0.
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Agents working in this repository should read [AGENTS.md](AGENTS.md). This project follows the [Code of Conduct](CODE_OF_CONDUCT.md). Report vulnerabilities privately, as described in [SECURITY.md](SECURITY.md).
+
+## License
+
+Apache License 2.0. See [LICENSE](LICENSE). Copyright 2026 deepak-muley.

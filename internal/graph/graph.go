@@ -10,9 +10,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/inventory"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/knowledge"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/semver"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/inventory"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/knowledge"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/semver"
 )
 
 // Edge kinds.

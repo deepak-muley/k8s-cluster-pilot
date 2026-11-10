@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/analyze"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/inventory"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/knowledge"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/model"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/semver"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/analyze"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/inventory"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/knowledge"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/model"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/semver"
 )
 
 // Build analyzes the inventory and appends upgrade steps.

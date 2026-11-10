@@ -10,11 +10,11 @@ import (
 
 	"github.com/Masterminds/semver/v3"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/graph"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/inventory"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/knowledge"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/model"
-	sem "github.com/deepak-muley/k8s-cluster-explorer/internal/semver"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/graph"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/inventory"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/knowledge"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/model"
+	sem "github.com/deepak-muley/k8s-cluster-pilot/internal/semver"
 )
 
 // Analyze builds a read-only analysis document for targetKubernetes.

@@ -3,9 +3,9 @@ package analyze
 import (
 	"testing"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/inventory"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/knowledge"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/model"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/inventory"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/knowledge"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/model"
 )
 
 func TestKubeletSkewAndUnknownComponent(t *testing.T) {

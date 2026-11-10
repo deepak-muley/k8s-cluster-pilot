@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security report
+    url: https://github.com/deepak-muley/k8s-cluster-pilot/security/advisories/new
+    about: Report a vulnerability in private. Do not open a public issue.
+  - name: Code of Conduct report
+    url: https://github.com/deepak-muley/k8s-cluster-pilot/security/advisories/new
+    about: Report conduct privately. Start the advisory title with "Code of Conduct".

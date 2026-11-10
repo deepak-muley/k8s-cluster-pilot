@@ -1,0 +1,26 @@
+name: Bug
+description: A command, rule, or report behaved incorrectly.
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Include the command and the status or finding you saw. Omit kubeconfigs, Secret data, and inventories from clusters you cannot share.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: clusterpilot version
+      placeholder: clusterpilot --version
+    validations:
+      required: true

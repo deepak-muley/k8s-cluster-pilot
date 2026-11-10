@@ -17,8 +17,8 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/discover/ref"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/inventory"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/discover/ref"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/inventory"
 )
 
 // Collect fills cluster, node, workload, API, storage, and webhook facts.

@@ -12,10 +12,10 @@ import (
 	"sort"
 	"strings"
 
-	bundled "github.com/deepak-muley/k8s-cluster-explorer/knowledge"
+	bundled "github.com/deepak-muley/k8s-cluster-pilot/knowledge"
 	"gopkg.in/yaml.v3"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/semver"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/semver"
 )
 
 // Rule types this POC knows how to load. Evaluation is separate.

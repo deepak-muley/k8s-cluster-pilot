@@ -1,7 +1,7 @@
 // Package model holds analysis and plan documents shared by the CLI and report.
 package model
 
-import "github.com/deepak-muley/k8s-cluster-explorer/internal/graph"
+import "github.com/deepak-muley/k8s-cluster-pilot/internal/graph"
 
 // SchemaVersion is the analysis and plan document contract.
 const SchemaVersion = "v1alpha1"

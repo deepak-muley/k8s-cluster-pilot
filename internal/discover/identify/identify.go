@@ -7,9 +7,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/discover/ref"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/inventory"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/semver"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/discover/ref"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/inventory"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/semver"
 )
 
 type signature struct {

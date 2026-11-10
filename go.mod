@@ -1,4 +1,4 @@
-module github.com/deepak-muley/k8s-cluster-explorer
+module github.com/deepak-muley/k8s-cluster-pilot
 
 go 1.24.11
 

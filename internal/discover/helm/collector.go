@@ -13,7 +13,7 @@ import (
 	"helm.sh/helm/v3/pkg/cli"
 	"helm.sh/helm/v3/pkg/releaseutil"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/inventory"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/inventory"
 )
 
 const resourceCap = 400

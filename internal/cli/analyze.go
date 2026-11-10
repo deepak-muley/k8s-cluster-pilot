@@ -5,10 +5,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/analyze"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/inventory"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/knowledge"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/report"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/analyze"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/inventory"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/knowledge"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/report"
 )
 
 func newAnalyze(stdout io.Writer) *cobra.Command {
@@ -17,6 +17,14 @@ func newAnalyze(stdout io.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "analyze",
 		Short: "Evaluate an inventory against a target Kubernetes version",
+		Long: `Evaluate an inventory file against a target Kubernetes version.
+
+Does not connect to a cluster. Prints a text report to stdout. Use --format markdown
+for Markdown, and --output to also write the analysis JSON. --rules merges extra
+YAML rule files with the builtin knowledge base.`,
+		Example: `  clusterpilot analyze --inventory inventory.json --target-kubernetes 1.33
+  clusterpilot analyze --inventory inventory.json --target-kubernetes 1.33.2 --format markdown
+  clusterpilot analyze --inventory inventory.json --target-kubernetes 1.33 --rules ./extra-rules`,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			cmd.SilenceUsage = true
 			inv, err := inventory.ReadFile(inventoryPath)

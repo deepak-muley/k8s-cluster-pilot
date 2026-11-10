@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/inventory"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/inventory"
 )
 
 func TestCiliumKeepsChartAndAppVersionsSeparate(t *testing.T) {

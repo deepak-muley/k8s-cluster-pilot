@@ -5,10 +5,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/discover/helm"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/discover/identify"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/discover/kubernetes"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/inventory"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/discover/helm"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/discover/identify"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/discover/kubernetes"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/inventory"
 )
 
 // Options selects the cluster and how long discovery may run.

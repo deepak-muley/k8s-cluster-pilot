@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/inventory"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/plan"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/inventory"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/plan"
 )
 
 func newPlan(stdout, stderr io.Writer) *cobra.Command {
@@ -16,6 +16,13 @@ func newPlan(stdout, stderr io.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "plan",
 		Short: "Build a dependency-aware upgrade plan from an inventory",
+		Long: `Build a dependency-aware upgrade plan from an inventory file.
+
+Does not connect to a cluster. Prints the overall status to stderr and writes
+plan JSON to --output, or to stdout when --output is omitted. --rules merges
+extra YAML rule files with the builtin knowledge base.`,
+		Example: `  clusterpilot plan --inventory inventory.json --target-kubernetes 1.33 -o plan.json
+  clusterpilot plan --inventory inventory.json --target-kubernetes 1.33 --rules ./extra-rules`,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			cmd.SilenceUsage = true
 			inv, err := inventory.ReadFile(inventoryPath)

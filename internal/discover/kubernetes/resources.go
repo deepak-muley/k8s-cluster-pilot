@@ -12,8 +12,8 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/dynamic"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/discover/ref"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/inventory"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/discover/ref"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/inventory"
 )
 
 const listCap = 2000

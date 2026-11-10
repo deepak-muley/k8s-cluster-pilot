@@ -8,6 +8,39 @@ import (
 	"testing"
 )
 
+func TestHelpShowsCommandExamples(t *testing.T) {
+	cases := []struct {
+		args []string
+		want []string
+	}{
+		{[]string{"--help"}, []string{
+			"clusterpilot discover -o inventory.json",
+			"clusterpilot analyze --inventory inventory.json --target-kubernetes 1.33",
+			"clusterpilot plan --inventory inventory.json --target-kubernetes 1.33 -o plan.json",
+			"clusterpilot report --input plan.json --format markdown",
+		}},
+		{[]string{"discover", "--help"}, []string{"clusterpilot discover --context kind-dev"}},
+		{[]string{"analyze", "--help"}, []string{"--rules ./extra-rules"}},
+		{[]string{"plan", "--help"}, []string{"-o plan.json"}},
+		{[]string{"report", "--help"}, []string{"--format text -o report.txt"}},
+		{[]string{"help", "discover"}, []string{"clusterpilot discover -o inventory.json"}},
+	}
+	for _, tc := range cases {
+		t.Run(strings.Join(tc.args, " "), func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			if err := Execute(tc.args, &stdout, &stderr); err != nil {
+				t.Fatal(err)
+			}
+			got := stdout.String()
+			for _, want := range tc.want {
+				if !strings.Contains(got, want) {
+					t.Fatalf("help missing %q\n%s", want, got)
+				}
+			}
+		})
+	}
+}
+
 func TestAnalyzeDoesNotNeedACluster(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "inventory.json")

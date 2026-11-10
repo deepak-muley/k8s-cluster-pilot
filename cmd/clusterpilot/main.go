@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/cli"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/cli"
 )
 
 func main() {

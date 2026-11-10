@@ -7,8 +7,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/model"
-	"github.com/deepak-muley/k8s-cluster-explorer/internal/report"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/model"
+	"github.com/deepak-muley/k8s-cluster-pilot/internal/report"
 )
 
 func newReport(stdout io.Writer) *cobra.Command {
@@ -16,6 +16,11 @@ func newReport(stdout io.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "report",
 		Short: "Render an analysis or plan",
+		Long: `Render an analysis or plan JSON file as Markdown or text.
+
+Does not connect to a cluster. Writes to stdout unless --output is set.`,
+		Example: `  clusterpilot report --input plan.json --format markdown
+  clusterpilot report --input analysis.json --format text -o report.txt`,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			cmd.SilenceUsage = true
 			var doc model.Document
