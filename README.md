@@ -86,7 +86,9 @@ go test ./...
 go build -o bin/clusterpilot ./cmd/clusterpilot
 ```
 
-Requires Go 1.27.3. An older `go` command downloads that toolchain from the `go` line in `go.mod`. To install the published module:
+Requires Go 1.27.3. An older `go` command downloads that toolchain from the `go` line in `go.mod`.
+
+`make test` runs the unit tests and does not need a cluster. `make test-kind` starts a kind cluster and runs the ten use cases in [test/kind/README.md](test/kind/README.md). `make test-all` runs both. To install the published module:
 
 ```bash
 go install github.com/deepak-muley/k8s-cluster-pilot/cmd/clusterpilot@latest

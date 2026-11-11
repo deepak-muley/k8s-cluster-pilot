@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pause
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pause
+  template:
+    metadata:
+      labels:
+        app: pause
+    spec:
+      containers:
+        - name: pause
+          image: registry.k8s.io/pause:3.10
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: pause
+  namespace: demo
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: pause
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: stuck
+  namespace: demo
+spec:
+  containers:
+    - name: stuck
+      image: registry.k8s.io/pause:3.10
+      readinessProbe:
+        httpGet:
+          path: /ready
+          port: 8080
+        periodSeconds: 1
+        failureThreshold: 1

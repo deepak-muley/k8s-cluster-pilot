@@ -1,0 +1,20 @@
+apiVersion: flowcontrol.apiserver.k8s.io/v1beta3
+kind: FlowSchema
+metadata:
+  name: demo-legacy-flow
+spec:
+  matchingPrecedence: 1000
+  distinguisherMethod:
+    type: ByUser
+  priorityLevelConfiguration:
+    name: exempt
+  rules:
+    - subjects:
+        - kind: User
+          user:
+            name: clusterpilot-demo@example.invalid
+      resourceRules:
+        - verbs: ["get"]
+          apiGroups: ["clusterpilot.example.invalid"]
+          resources: ["widgets"]
+          clusterScope: true

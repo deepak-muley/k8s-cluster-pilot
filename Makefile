@@ -1,10 +1,16 @@
-.PHONY: build test fmt update-pluto
+.PHONY: build test test-kind test-all fmt update-pluto
 
 build:
 	go build -o bin/clusterpilot ./cmd/clusterpilot
 
 test:
 	go test ./...
+
+# Docker, kind, kubectl, and Helm 3. See test/kind/README.md.
+test-kind:
+	go test -tags kind -count=1 -timeout 20m ./test/kind/
+
+test-all: test test-kind
 
 fmt:
 	gofmt -w .

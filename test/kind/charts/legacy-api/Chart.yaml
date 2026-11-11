@@ -1,0 +1,6 @@
+apiVersion: v2
+name: legacy-api
+description: Fixture release whose manifest still names a deprecated FlowSchema.
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

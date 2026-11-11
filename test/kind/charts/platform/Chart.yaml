@@ -1,0 +1,7 @@
+apiVersion: v2
+name: platform
+description: Fixture chart whose kubeVersion stops before Kubernetes 1.33.
+type: application
+version: 2.0.0
+appVersion: "2.0.0"
+kubeVersion: ">=1.25.0-0 <1.33.0-0"

@@ -12,7 +12,7 @@ go build -o bin/clusterpilot ./cmd/clusterpilot
 gofmt -w .
 ```
 
-`make test`, `make build`, and `make fmt` wrap those commands. Run `go test ./...` before finishing a change. CI runs the same test command.
+`make test`, `make build`, and `make fmt` wrap those commands. Run `go test ./...` before finishing a change. CI runs the same test command. `make test-kind` is optional: it needs Docker, kind, kubectl, and Helm, and it is documented in `test/kind/README.md`. `make test-all` runs `make test` and then `make test-kind`.
 
 Do not commit `bin/`, `inventory.json`, or `plan.json`. Discovery output can describe a real cluster.
 
@@ -28,6 +28,7 @@ Do not commit `bin/`, `inventory.json`, or `plan.json`. Discovery output can des
 | `knowledge/rules` | Builtin skew and operations rules, embedded by `knowledge/embed.go` |
 | `knowledge/pluto` | Pinned Pluto `versions.yaml` and the release named in `source.yaml` |
 | `scripts/update-pluto-versions.sh` | Replace the Pluto pin from a release tag. Tags are listed at <https://github.com/FairwindsOps/pluto/releases> |
+| `test/kind` | Optional kind cluster scenarios. Not part of `go test ./...` |
 | `internal/analyze` | Offline compatibility evaluation |
 | `internal/plan` | Upgrade plan built from analysis and the graph |
 | `internal/graph` | `upgrade-before` edges only when a rule requires that order |

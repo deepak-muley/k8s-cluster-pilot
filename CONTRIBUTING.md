@@ -25,7 +25,7 @@ go test ./...
 go build -o bin/clusterpilot ./cmd/clusterpilot
 ```
 
-`make test`, `make build`, and `make fmt` do the same thing. `make fmt` runs `gofmt -w .`.
+`make test`, `make build`, and `make fmt` do the same thing. `make fmt` runs `gofmt -w .`. `make test-kind` runs the kind scenarios in [test/kind/README.md](test/kind/README.md). It needs Docker, kind, kubectl, and Helm 3. `make test-all` runs the unit tests and then those scenarios. CI runs `go test ./...` only.
 
 ## Pull requests
 
