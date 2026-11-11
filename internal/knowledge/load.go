@@ -23,6 +23,7 @@ const (
 	RuleVersionSkew      = "version-skew"
 	RuleMinorUpgradeStep = "minor-upgrade-step"
 	RuleRemovedAPI       = "removed-api"
+	RuleDeprecatedAPI    = "deprecated-api"
 	RuleAdmissionWebhook = "admission-webhook-prerequisite"
 	RulePDBDrain         = "pdb-zero-disruptions"
 	RulePatchAdvisory    = "patch-advisory"
@@ -96,16 +97,24 @@ type MinorStepParams struct {
 
 // RemovedAPIParams describes an API version that stopped being served.
 type RemovedAPIParams struct {
-	Group       string   `yaml:"group"`
-	Version     string   `yaml:"version"`
-	Kinds       []string `yaml:"kinds"`
-	RemovedIn   string   `yaml:"removedIn"`
-	Replacement string   `yaml:"replacement"`
+	Group        string   `yaml:"group"`
+	Version      string   `yaml:"version"`
+	Kinds        []string `yaml:"kinds"`
+	RemovedIn    string   `yaml:"removedIn"`
+	DeprecatedIn string   `yaml:"deprecatedIn"`
+	Replacement  string   `yaml:"replacement"`
 }
 
-// LoadBuiltin reads the rules compiled into the binary.
+// LoadBuiltin reads the rules compiled into the binary and the pinned Pluto dataset.
 func LoadBuiltin() (*Base, error) {
-	return LoadFS(bundled.Rules)
+	base, err := LoadFS(bundled.Rules)
+	if err != nil {
+		return nil, err
+	}
+	if err := base.addPluto(bundled.PlutoVersions, bundled.PlutoSource); err != nil {
+		return nil, err
+	}
+	return base, nil
 }
 
 // LoadFS reads every YAML document under rules/ plus top-level YAML files.
@@ -249,12 +258,33 @@ func (p RemovedAPIParams) MatchesUsage(group, version, kind string) bool {
 }
 
 // AppliesAtTarget reports whether target is at or beyond the removal minor.
+// A rule with no removal version does not apply.
 func (p RemovedAPIParams) AppliesAtTarget(target semver.Version) (bool, error) {
+	if p.RemovedIn == "" {
+		return false, nil
+	}
 	removed, err := semver.Parse(p.RemovedIn)
 	if err != nil {
 		return false, err
 	}
 	return target.CompareMinor(removed) >= 0, nil
+}
+
+// DeprecatedAtTarget reports whether target is at or beyond the deprecation
+// minor and still before removal. Once the API is removed, removal is the result.
+func (p RemovedAPIParams) DeprecatedAtTarget(target semver.Version) (bool, error) {
+	if p.DeprecatedIn == "" {
+		return false, nil
+	}
+	removed, err := p.AppliesAtTarget(target)
+	if err != nil || removed {
+		return false, err
+	}
+	deprecated, err := semver.Parse(p.DeprecatedIn)
+	if err != nil {
+		return false, err
+	}
+	return target.CompareMinor(deprecated) >= 0, nil
 }
 
 // OlderLimit returns the max minors the subject may lag, including the
@@ -366,7 +396,7 @@ func validate(rule Rule) error {
 		return fmt.Errorf("rule %q has confidence %q", rule.ID, rule.Confidence)
 	}
 	switch rule.Verification {
-	case "official-documentation", "observed", "chart-metadata", "insufficient-evidence":
+	case "official-documentation", "upstream-dataset", "observed", "chart-metadata", "insufficient-evidence":
 	default:
 		return fmt.Errorf("rule %q has verification %q", rule.ID, rule.Verification)
 	}

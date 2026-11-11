@@ -30,7 +30,7 @@ func TestMinorSequenceAndAPIMigration(t *testing.T) {
 	if doc.Status != model.OutcomeBlocked {
 		t.Fatalf("status %s", doc.Status)
 	}
-	migrate := findStep(doc, "migrate-removed-autoscaling-v2beta2-hpa")
+	migrate := findStep(doc, "migrate-removed-autoscaling-v2beta2-horizontalpodautoscaler")
 	hop31 := findStep(doc, "upgrade-kube-apiserver-1-30-4-to-1-31")
 	hop32 := findStep(doc, "upgrade-kube-apiserver-1-31-to-1-32")
 	if migrate.Order == 0 || hop31.Order == 0 || hop32.Order == 0 {

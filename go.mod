@@ -1,6 +1,6 @@
 module github.com/deepak-muley/k8s-cluster-pilot
 
-go 1.24.11
+go 1.27.3
 
 require (
 	github.com/Masterminds/semver/v3 v3.4.0

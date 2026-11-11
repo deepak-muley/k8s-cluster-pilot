@@ -3,17 +3,16 @@ kind: KnowledgeBase
 name: clusterpilot-builtin
 retrievedAt: "2026-11-09"
 description: >
-  Official Kubernetes version-skew, upgrade-order, and removed-API rules.
-  This snapshot does not include CNI, CSI, OS, kernel, container-runtime,
-  or Helm chart compatibility matrices. Those combinations stay unknown
-  unless a chart publishes a kubeVersion constraint, which is recorded as a
-  publisher claim and is not treated as verified compatibility.
+  Official Kubernetes version-skew and upgrade-order rules.
+  Removed and deprecated Kubernetes APIs are loaded from the pinned Pluto
+  versions file, not from this snapshot. This snapshot does not include CNI,
+  CSI, OS, kernel, container-runtime, or Helm chart compatibility matrices.
+  Those combinations stay unknown unless a chart publishes a kubeVersion
+  constraint, which is recorded as a publisher claim and is not treated as
+  verified compatibility.
 sources:
   - url: https://kubernetes.io/releases/version-skew-policy/
     title: Kubernetes version skew policy
-    retrievedAt: "2026-11-09"
-  - url: https://kubernetes.io/docs/reference/using-api/deprecation-guide/
-    title: Kubernetes Deprecated API Migration Guide
     retrievedAt: "2026-11-09"
   - url: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
     title: Disruptions

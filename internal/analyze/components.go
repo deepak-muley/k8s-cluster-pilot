@@ -12,38 +12,33 @@ import (
 
 func evaluateRemovedAPIs(inv *inventory.Inventory, target semver.Version, rules *knowledge.Base) []model.Finding {
 	var findings []model.Finding
-	for _, rule := range rules.ByType(knowledge.RuleRemovedAPI) {
+	ruleset := append(rules.ByType(knowledge.RuleRemovedAPI), rules.ByType(knowledge.RuleDeprecatedAPI)...)
+	for _, rule := range ruleset {
 		params, err := rule.RemovedAPI()
 		if err != nil {
 			findings = append(findings, unreadable(rule, err))
 			continue
 		}
-		applies, err := params.AppliesAtTarget(target)
+		removed, err := params.AppliesAtTarget(target)
 		if err != nil {
 			findings = append(findings, unreadable(rule, err))
 			continue
 		}
-		if !applies {
+		deprecated, err := params.DeprecatedAtTarget(target)
+		if err != nil {
+			findings = append(findings, unreadable(rule, err))
 			continue
 		}
-		var usageExamples []string
-		usageCount := 0
-		for _, usage := range inv.APIUsages {
-			if !params.MatchesUsage(usage.Group, usage.Version, usage.Kind) {
-				continue
-			}
-			usageCount += usage.Count
-			usageExamples = append(usageExamples, usage.Examples...)
+		if !removed && !deprecated {
+			continue
 		}
-		served := false
-		for _, resource := range inv.APIResources {
-			if params.MatchesUsage(resource.Group, resource.Version, resource.Kind) {
-				served = true
-				break
-			}
+		usageCount, usageExamples, served := observedAPI(inv, params)
+		if usageCount == 0 && !served {
+			continue
 		}
-		if usageCount > 0 {
-			detail := fmt.Sprintf("%s/%s %s is removed in Kubernetes %s and %d observed reference(s) still use it.", params.Group, params.Version, strings.Join(params.Kinds, ", "), params.RemovedIn, usageCount)
+		label := apiLabel(params)
+		if removed && usageCount > 0 {
+			detail := fmt.Sprintf("%s is removed in Kubernetes %s and %d observed reference(s) still use it.", label, params.RemovedIn, usageCount)
 			if len(usageExamples) > 0 {
 				detail += " Examples: " + strings.Join(limit(usageExamples, 5), ", ") + "."
 			}
@@ -55,7 +50,7 @@ func evaluateRemovedAPIs(inv *inventory.Inventory, target semver.Version, rules 
 				Severity:      rule.Severity,
 				Component:     apiName(params),
 				ComponentType: "kubernetes-api",
-				Title:         apiName(params) + " is used and is removed in the target",
+				Title:         label + " is used and is removed in the target",
 				Detail:        detail,
 				Remediation:   rule.Remediation,
 				Evidence:      evidence(rule),
@@ -65,7 +60,7 @@ func evaluateRemovedAPIs(inv *inventory.Inventory, target semver.Version, rules 
 			})
 			continue
 		}
-		if served {
+		if removed {
 			findings = append(findings, model.Finding{
 				ID:            rule.ID + "/served",
 				RuleID:        rule.ID,
@@ -74,16 +69,60 @@ func evaluateRemovedAPIs(inv *inventory.Inventory, target semver.Version, rules 
 				Severity:      "medium",
 				Component:     apiName(params),
 				ComponentType: "kubernetes-api",
-				Title:         apiName(params) + " is still served and is removed in the target",
+				Title:         label + " is still served and is removed in the target",
 				Detail:        "The apiserver still serves this API. Discovery did not observe object or manifest usage. Usage outside the collected sources is still possible, so this was not marked compatible.",
 				Remediation:   rule.Remediation,
 				Evidence:      evidence(rule),
 				Confidence:    "medium",
 				Verification:  rule.Verification,
 			})
+			continue
 		}
+		state := "is still served"
+		detail := "The apiserver still serves this API. Discovery did not observe object or manifest usage."
+		suffix := "/served"
+		if usageCount > 0 {
+			state = "is used"
+			suffix = "/used"
+			detail = fmt.Sprintf("%s is deprecated in Kubernetes %s and %d observed reference(s) still use it. Pluto does not list a removal at this target.", label, params.DeprecatedIn, usageCount)
+			if len(usageExamples) > 0 {
+				detail += " Examples: " + strings.Join(limit(usageExamples, 5), ", ") + "."
+			}
+		}
+		findings = append(findings, model.Finding{
+			ID:            rule.ID + suffix,
+			RuleID:        rule.ID,
+			RuleType:      rule.RuleType,
+			Status:        model.StatusPotentialRisk,
+			Severity:      "medium",
+			Component:     apiName(params),
+			ComponentType: "kubernetes-api",
+			Title:         label + " " + state + " and is deprecated in the target",
+			Detail:        detail,
+			Remediation:   rule.Remediation,
+			Evidence:      evidence(rule),
+			Confidence:    "medium",
+			Verification:  rule.Verification,
+		})
 	}
 	return findings
+}
+
+func observedAPI(inv *inventory.Inventory, params knowledge.RemovedAPIParams) (count int, examples []string, served bool) {
+	for _, usage := range inv.APIUsages {
+		if !params.MatchesUsage(usage.Group, usage.Version, usage.Kind) {
+			continue
+		}
+		count += usage.Count
+		examples = append(examples, usage.Examples...)
+	}
+	for _, resource := range inv.APIResources {
+		if params.MatchesUsage(resource.Group, resource.Version, resource.Kind) {
+			served = true
+			break
+		}
+	}
+	return count, examples, served
 }
 
 func evaluateComponents(inv *inventory.Inventory, target semver.Version, rules *knowledge.Base) []model.Finding {
@@ -254,6 +293,13 @@ func apiName(params knowledge.RemovedAPIParams) string {
 		group = "core"
 	}
 	return group + "/" + params.Version
+}
+
+func apiLabel(params knowledge.RemovedAPIParams) string {
+	if len(params.Kinds) == 0 {
+		return apiName(params)
+	}
+	return apiName(params) + " " + strings.Join(params.Kinds, ", ")
 }
 
 func display(value string) string {

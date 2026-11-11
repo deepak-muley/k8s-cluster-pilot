@@ -4,7 +4,7 @@ Guidance for coding agents working in this repository. People should start with 
 
 ## Commands
 
-Go 1.24 or newer. Module path: `github.com/deepak-muley/k8s-cluster-pilot`.
+Go 1.27.3 or newer. Module path: `github.com/deepak-muley/k8s-cluster-pilot`. The `go` line in `go.mod` selects the toolchain. An older `go` binary downloads it; `go version` outside the module can still report the older install.
 
 ```bash
 go test ./...
@@ -25,7 +25,9 @@ Do not commit `bin/`, `inventory.json`, or `plan.json`. Discovery output can des
 | `internal/discover` | Read-only Kubernetes and Helm collection |
 | `internal/inventory` | Versioned inventory contract, schema `v1alpha1` |
 | `internal/knowledge` | Loads builtin and extra YAML rules |
-| `knowledge/rules` | Builtin rules, embedded by `knowledge/embed.go` |
+| `knowledge/rules` | Builtin skew and operations rules, embedded by `knowledge/embed.go` |
+| `knowledge/pluto` | Pinned Pluto `versions.yaml` and the release named in `source.yaml` |
+| `scripts/update-pluto-versions.sh` | Replace the Pluto pin from a release tag. Tags are listed at <https://github.com/FairwindsOps/pluto/releases> |
 | `internal/analyze` | Offline compatibility evaluation |
 | `internal/plan` | Upgrade plan built from analysis and the graph |
 | `internal/graph` | `upgrade-before` edges only when a rule requires that order |
@@ -43,6 +45,7 @@ Do not commit `bin/`, `inventory.json`, or `plan.json`. Discovery output can des
 - `upgrade-before` edges exist only for a loaded rule, and each edge carries that rule ID. Structural edges do not imply an upgrade order.
 - The plan does not invent patch numbers. A target of `1.33` means minor 1.33.
 - A new or changed builtin rule needs a stable `id`, a `source.url`, `retrievedAt`, and a test that fails if the rule is dropped or inverted.
+- Do not hand-edit `knowledge/pluto/versions.yaml`. Update it with `make update-pluto VERSION=<tag>`, using a tag from <https://github.com/FairwindsOps/pluto/releases>. `source.yaml` records that tag and the file checksum. Load only `component: k8s` rows. Istio and cert-manager rows are not Kubernetes versions.
 - With `--output` set, `discover` writes the inventory file and leaves stdout empty. Warnings go to stderr.
 
 ## Report output

@@ -8,3 +8,13 @@ import "embed"
 //
 //go:embed rules/*.yaml
 var Rules embed.FS
+
+// PlutoVersions is the pinned Fairwinds Pluto versions.yaml.
+//
+//go:embed pluto/versions.yaml
+var PlutoVersions []byte
+
+// PlutoSource names the Pluto release that PlutoVersions was copied from.
+//
+//go:embed pluto/source.yaml
+var PlutoSource []byte

@@ -50,13 +50,21 @@ Node `reportedKernelVersion` and `osImage` are copied from kubelet status. They 
 
 ## Knowledge base
 
-Builtin rules live in `knowledge/rules/` and are embedded in the binary. They were retrieved on 2026-11-09 from:
+Builtin skew and operations rules live in `knowledge/rules/` and are embedded in the binary. They were retrieved on 2026-11-09 from:
 
 - [Kubernetes version skew policy](https://kubernetes.io/releases/version-skew-policy/)
-- [Deprecated API Migration Guide](https://kubernetes.io/docs/reference/using-api/deprecation-guide/)
 - [Disruptions](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/)
 
-The skew rules encode the published minor limits, including the smaller limit for kubelet and kube-proxy versions below 1.25. Removed-API rules cover the guide through the Kubernetes 1.32 removals. The guide retrieved on that date did not list removals for 1.33 or later. Absence of a removal rule is not proof that an API remains.
+The skew rules encode the published minor limits, including the smaller limit for kubelet and kube-proxy versions below 1.25.
+
+Removed and deprecated Kubernetes APIs come from a pinned [Pluto](https://github.com/FairwindsOps/pluto) `versions.yaml`. The pin is `knowledge/pluto/source.yaml` (module, release, file URL, and sha256), and the file itself is `knowledge/pluto/versions.yaml`. Findings cite that release. Only `component: k8s` rows are loaded. Istio and cert-manager rows in the same file are versions of those products, so they are not compared with the Kubernetes target. A row with `removed-in` blocks when the API is still used. A row that is only deprecated is a potential risk. An API absent from the file was not treated as compatible.
+
+Pluto releases are listed at <https://github.com/FairwindsOps/pluto/releases>. The file for a tag is `https://github.com/FairwindsOps/pluto/blob/<tag>/versions.yaml`. To adopt a newer release:
+
+```bash
+make update-pluto VERSION=v5.24.5
+go test ./...
+```
 
 Chart `kubeVersion` is evaluated as a publisher claim. A constraint that includes the target stays `unknown`. A constraint that excludes it becomes `potential-risk`.
 
@@ -78,7 +86,7 @@ go test ./...
 go build -o bin/clusterpilot ./cmd/clusterpilot
 ```
 
-Requires Go 1.24. To install the published module:
+Requires Go 1.27.3. An older `go` command downloads that toolchain from the `go` line in `go.mod`. To install the published module:
 
 ```bash
 go install github.com/deepak-muley/k8s-cluster-pilot/cmd/clusterpilot@latest
@@ -86,7 +94,7 @@ go install github.com/deepak-muley/k8s-cluster-pilot/cmd/clusterpilot@latest
 
 ## Out of scope
 
-ClusterPilot does not simulate an upgrade, score a fleet, or apply changes. It also does not shell out to Pluto, kubent, KubePug, or Silver Surfer. Those tools remain complementary. This knowledge base cites the Kubernetes documentation directly instead of copying their datasets.
+ClusterPilot does not simulate an upgrade, score a fleet, or apply changes. It does not shell out to Pluto, kubent, KubePug, or Silver Surfer. The removed-API dataset is the pinned Pluto file described above. Skew and disruption rules still cite the Kubernetes documentation.
 
 ## Contributing
 

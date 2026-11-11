@@ -1,6 +1,7 @@
 package analyze
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/deepak-muley/k8s-cluster-pilot/internal/inventory"
@@ -80,6 +81,39 @@ func TestRemovedAPIUsageBlocks(t *testing.T) {
 	}
 	if !hasStatus(doc, "removed-batch-v1beta1-cronjob/used", model.StatusIncompatible) {
 		t.Fatal("expected cronjob removal finding")
+	}
+	for _, finding := range doc.Findings {
+		if finding.ID != "removed-batch-v1beta1-cronjob/used" {
+			continue
+		}
+		if len(finding.Evidence) != 1 || finding.Evidence[0].RetrievedAt == "" || !strings.Contains(finding.Evidence[0].URL, "/"+finding.Evidence[0].RetrievedAt+"/") {
+			t.Fatalf("removal evidence does not name the Pluto release: %+v", finding.Evidence)
+		}
+	}
+}
+
+func TestDeprecatedAPIIsNotABlock(t *testing.T) {
+	rules := mustRules(t)
+	inv := baseInventory("1.33.0", "1.33.0")
+	inv.AddAPIUsage("storage.k8s.io", "v1beta1", "VolumeAttributesClass", "helm-manifest", "storage/fast")
+	before, err := Analyze(inv, "1.33", rules)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if hasStatus(before, "deprecated-storage-k8s-io-v1beta1-volumeattributesclass/used", model.StatusPotentialRisk) {
+		t.Fatal("deprecation in 1.34 was applied to target 1.33")
+	}
+	inv = baseInventory("1.34.0", "1.34.0")
+	inv.AddAPIUsage("storage.k8s.io", "v1beta1", "VolumeAttributesClass", "helm-manifest", "storage/fast")
+	doc, err := Analyze(inv, "1.34", rules)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if doc.Status == model.OutcomeBlocked {
+		t.Fatal("a deprecation with no removal version blocked the plan")
+	}
+	if !hasStatus(doc, "deprecated-storage-k8s-io-v1beta1-volumeattributesclass/used", model.StatusPotentialRisk) {
+		t.Fatalf("findings %+v", titles(doc))
 	}
 }
 

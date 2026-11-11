@@ -242,7 +242,7 @@ func writeCaveats(b *strings.Builder, markdown bool) {
 	for _, line := range []string{
 		"This tool does not change the cluster.",
 		"A missing rule is unknown, not compatible.",
-		"Removed-API coverage is the Kubernetes Deprecated API Migration Guide snapshot retrieved on 2026-11-09. Later removals are not assumed to be absent.",
+		"Removed Kubernetes APIs come from the Pluto versions.yaml pinned in knowledge/pluto/source.yaml. A deprecation with no removal version is a potential risk. An API absent from that file was not treated as compatible.",
 		"Node kernel and OS image values are copied from kubelet status and were not verified by a node agent.",
 		"Helm values and Secret data are omitted.",
 		"Local kubectl skew is not evaluated.",

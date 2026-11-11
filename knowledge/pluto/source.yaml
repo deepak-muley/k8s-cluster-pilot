@@ -1,0 +1,4 @@
+module: github.com/fairwindsops/pluto/v5
+version: v5.24.5
+url: https://github.com/FairwindsOps/pluto/blob/v5.24.5/versions.yaml
+sha256: 68c70bc983ad53f496dbf24935749f54306ee8a0128d68442a4916d4a5b22cd5
